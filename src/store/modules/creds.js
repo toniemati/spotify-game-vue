@@ -1,23 +1,24 @@
 const state = {
   creds: {
-    login: '',
-    password: ''
+    access_token: '',
+    refresh_token: ''
   }
 };
 
 const getters = {
-  getLogin: (state) => state.creds.login
+  getCreds: (state) => state.creds
 };
 
 const actions = {
-  setLogin: ({commit}, login) => {
-    commit('setLogin', login);
+  setCreds: ({commit}, creds) => {
+    commit('setCreds', creds)
   },
 };
 
 const mutations = {
-  setLogin: ({creds}, login) => {
-    creds.login = login;
+  setCreds: ({creds}, {access_token, refresh_token}) => {
+    creds.access_token = access_token
+    creds.refresh_token = refresh_token
   }
 };
 

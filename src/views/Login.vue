@@ -8,16 +8,22 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'Login',
   methods: {
-    login: function() {
-      console.log('trying to log in...')
-      this.$router.push({ path: 'http://localhost:8888/login'})
+    ...mapActions(['setCreds'])
+  },
+  computed: {
+    ...mapGetters(['getCreds'])
+  },
+  beforeMount() {
+    this.setCreds(this.$route.query);
+
+    if (this.getCreds.access_token) {
+      this.$router.push({ path: '/'})
     }
   }
-
-
 }
 </script>
 
