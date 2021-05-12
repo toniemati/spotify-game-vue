@@ -1,10 +1,36 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <div id="app">
+    <div v-show="getLogin" v-if="!getLogin">{{ $router.push({path: '/login'}) }}</div>
+    <div v-show="!getLogin" v-else>{{ $router.push({path: '/'}) }}</div>
   </div>
   <router-view/>
 </template>
+
+<script>
+import { mapGetters} from 'vuex'
+
+export default {
+  name: "App",
+  computed: {
+    ...mapGetters(['getLogin'])
+  },
+  beforeMount() {
+    console.log('siema')
+  },
+  methods: {
+    getHashParams: function() {
+          const hashParams = {};
+          let e = '';
+          let r = /([^&;=]+)=?([^&;]*)/g,
+              q = window.location.hash.substring(1);
+          while ( e = r.exec(q)) {
+             hashParams[e[1]] = decodeURIComponent(e[2]);
+          }
+          return hashParams;
+        }
+  }
+};
+</script>
 
 <style>
 #app {
@@ -17,14 +43,5 @@
 
 #nav {
   padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
 }
 </style>

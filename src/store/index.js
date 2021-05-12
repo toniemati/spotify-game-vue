@@ -1,12 +1,8 @@
 import { createStore } from 'vuex'
+import creds from './modules/creds.js'
 
 export default createStore({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
   modules: {
+    creds
   }
 })
