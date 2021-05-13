@@ -4,11 +4,14 @@
       <User :user="user" />
     </div>
 
-    <div v-if="getPlaylist.id">Jest wybrana playlista {{ getPlaylist.name }}</div>
-
-    <div class="playlists">
+    <div v-if="!getPlaylist.id" class="playlists">
       <Playlists @send-playlist-id="checkId" v-if="playlists" :playlists="playlists" />
       <button v-if="!playlists" @click="getPlaylists">get playlists</button>
+    </div>
+
+    <div v-if="getPlaylist.id">
+      <h4>{{ getPlaylist.name }}</h4>
+      <button @click="clearPlaylist">choose another playlist</button>
     </div>
   </div>
 </template>
@@ -49,7 +52,7 @@ export default {
       .then(({ body }) => this.user = body);
   },
   methods: {
-    ...mapActions(['setPlaylist']),
+    ...mapActions(['setPlaylist', 'clearPlaylist']),
     getPlaylists: function() {
       SPOTIFY.getUserPlaylists(this.user.id)
         .then(({ body }) => this.playlists = body.items);
