@@ -4,8 +4,10 @@
       <User :user="user" />
     </div>
 
+    <div v-if="getPlaylist.id">Jest wybrana playlista {{ getPlaylist.name }}</div>
+
     <div class="playlists">
-      <Playlists v-if="playlists" :playlists="playlists" />
+      <Playlists @send-playlist-id="checkId" v-if="playlists" :playlists="playlists" />
       <button v-if="!playlists" @click="getPlaylists">get playlists</button>
     </div>
   </div>
@@ -15,7 +17,7 @@
 import SpotifyWebApi from 'spotify-web-api-node';
 import User from '../components/User.vue'
 import Playlists from '../components/Playlists.vue'
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 
 const SPOTIFY = new SpotifyWebApi({
@@ -34,7 +36,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getCreds'])
+    ...mapGetters(['getCreds', 'getPlaylist'])
   },
   beforeMount() {
     if (!this.getCreds.access_token) {
@@ -47,9 +49,18 @@ export default {
       .then(({ body }) => this.user = body);
   },
   methods: {
+    ...mapActions(['setPlaylist']),
     getPlaylists: function() {
       SPOTIFY.getUserPlaylists(this.user.id)
         .then(({ body }) => this.playlists = body.items);
+    },
+    checkId: function(id) {
+      SPOTIFY.getPlaylist(id)
+        .then((data) => {
+          if (data.statusCode == 200) {
+            this.setPlaylist(data.body)
+          }
+        });
     }
   }
 }

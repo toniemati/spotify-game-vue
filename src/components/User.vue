@@ -17,7 +17,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .pic img {
   border-radius: 50%;
   height: 100px;
