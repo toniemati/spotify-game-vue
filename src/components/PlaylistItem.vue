@@ -24,12 +24,12 @@ export default {
 .playlist-item {
   border-radius: 10px;
   margin: 0.2rem 1rem 0.2rem 1rem;
-  padding: 0.5rem;
-  width: 20%;
+  padding: 1rem;
+  width: 15%;
 
   display: flex;
-  text-align: center;
   justify-content: center;
+  align-items: center;
   flex-direction: column;
   transition: box-shadow 0.2s ease-in-out;
 }
@@ -42,6 +42,5 @@ export default {
 img {
   border-radius: 20px;
   width: 100%;
-  height: 80%;
 }
 </style>

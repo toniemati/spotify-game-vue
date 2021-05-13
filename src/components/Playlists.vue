@@ -3,9 +3,9 @@
     <div class="wrapper">
       <div class="input-data">
         <input name="id" required @input="settingPlaylistFromId" type="text" autocompete="off">
-        <div class="underline"></div>
-        <label for="id" class="label-id">
-          Click on playlist or paste an ID
+        <div :class="{errUnderline: error}" class="underline"></div>
+        <label :class="{errText: error}" for="id" class="label-id">
+          {{ text }}
         </label>
       </div>
 
@@ -24,6 +24,12 @@ import PlaylistItem from '../components/PlaylistItem.vue';
 export default {
   name: "Playlists",
   props: ['playlists'],
+  data() {
+    return {
+      text: 'Click on playlist or paste an ID',
+      error: false
+    }
+  },
   components: { PlaylistItem },
   computed: {
     ...mapGetters(['getPlaylist'])
@@ -31,8 +37,20 @@ export default {
   methods: {
     settingPlaylistFromId: function(e) {
       const id = e.target.value;
+
+      if (id.length == 0) {
+        this.error = false;
+        this.text = 'Click on playlist or paste an ID';
+      }
+
       if (id.length == 22) {
         this.$emit('send-playlist-id', id)
+
+        if (!this.getPlaylist.id) {
+          this.error = true;
+          this.text = 'Wrong playlist ID'
+        }
+
       }
     }
   }
@@ -43,7 +61,7 @@ export default {
 .playlist {
   display: flex;
   justify-content: center;
-  align-content: center;
+  align-items: center;
   flex-wrap: wrap;
   margin-bottom: 2rem;
   margin-top: 2rem;
@@ -110,5 +128,13 @@ export default {
 .input-data input:focus ~ .underline:before,
 .input-data input:valid ~ .underline:before {
   transform: scaleX(1)
+}
+
+.errText {
+  color: red !important;
+}
+
+.errUnderline:before {
+  background-color: red !important;
 }
 </style>
