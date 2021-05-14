@@ -11,16 +11,18 @@
 
     <div v-if="getPlaylist.id">
       <h4>{{ getPlaylist.name }}</h4>
-      <button @click="clearPlaylist">choose another playlist</button>
+      <div class="clearPlaylist" @click="clearPlaylist">🔙</div>
+      <Game :tracks="tracks" />
     </div>
   </div>
 </template>
 
 <script>
 import SpotifyWebApi from 'spotify-web-api-node';
+import { mapActions, mapGetters } from 'vuex'
 import User from '../components/User.vue'
 import Playlists from '../components/Playlists.vue'
-import { mapActions, mapGetters } from 'vuex'
+import Game from '../components/Game.vue';
 
 
 const SPOTIFY = new SpotifyWebApi({
@@ -31,11 +33,12 @@ const SPOTIFY = new SpotifyWebApi({
 
 export default {
   name: 'Home',
-  components: { User, Playlists },
+  components: { User, Playlists, Game },
   data() {
     return {
       user: null,
       playlists: null,
+      tracks: [],
     }
   },
   computed: {
@@ -45,11 +48,14 @@ export default {
     if (!this.getCreds.access_token) {
       this.$router.push({ path: '/login' })
     }
-    SPOTIFY.setAccessToken(this.getCreds.access_token);
   },
   mounted() {
-    SPOTIFY.getMe()
-      .then(({ body }) => this.user = body);
+    if (this.getCreds.access_token) {
+      SPOTIFY.setAccessToken(this.getCreds.access_token);
+
+      SPOTIFY.getMe()
+        .then(({ body }) => this.user = body);
+    }
   },
   methods: {
     ...mapActions(['setPlaylist', 'clearPlaylist']),
@@ -65,6 +71,36 @@ export default {
           }
         });
     }
+  },
+  watch: {
+    getPlaylist() {
+      if (this.getPlaylist.id) {
+
+        for (let i = 0; i < this.getPlaylist.tracks.total; i += 100) {
+          SPOTIFY.getPlaylistTracks(this.getPlaylist.id, { limit: 100, offset: i})
+            .then(({ body }) => {
+              const { items } = body;
+              items.forEach((item) => {
+                if (item.track.preview_url && item.track.preview_url.length > 0) {
+                  this.tracks.push(item.track)
+                }
+              })
+            })
+        }
+      } else {
+        this.tracks = [];
+      }
+    }
   }
 }
 </script>
+
+<style scoped>
+.clearPlaylist {
+  position: absolute;
+  left: 2rem;
+  top: 3rem;
+  cursor: pointer;
+  font-size: 2rem;
+}
+</style>

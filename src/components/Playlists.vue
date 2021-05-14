@@ -32,7 +32,7 @@ export default {
   },
   components: { PlaylistItem },
   computed: {
-    ...mapGetters(['getPlaylist'])
+    ...mapGetters(['getPlaylist']),
   },
   methods: {
     settingPlaylistFromId: function(e) {
