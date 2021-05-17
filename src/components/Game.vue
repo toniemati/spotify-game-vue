@@ -1,26 +1,40 @@
 <template>
   <div id="game">
-    <p class="startBtn" @click="start">🍔</p>
-    <audio ref="audioEl"></audio>
-    <p @click="checkPoint" v-for="track in fourTracks" :key="track.id">{{ track.name }}</p>
+    <div v-if="gameIsPlaying">
+      <h4>round {{ round }}</h4>
+      <div class="items">
+        <TrackItem @click="checkPoint" v-for="track in fourTracks" :key="track.id" :name="track.name"/>
+      </div>
+    </div>
+    <div v-else>
+      <p v-if="round == 1" class="startBtn" @click="start">START</p>
+      <h4 v-if="round == 10">points: {{ points }} / 10</h4>
+    </div>
     <audio ref="audioEl"></audio>
   </div>
 </template>
 
 <script>
+import TrackItem from '../components/TrackItem.vue';
+
 export default {
   name: "Game",
   props: ['tracks'],
+  components: { TrackItem },
   data() {
     return {
       fourTracks: [],
       currentTrack: null,
-      timeOut: null
+      timeOut: null,
+      gameIsPlaying: false,
+      round: 1,
+      points: 0,
     }
   },
   methods: {
     start: function() {
       this.fourTracks = [];
+      this.gameIsPlaying = true;
 
       for (let i = 0; this.fourTracks.length < 4; i++) {
         const tr = this.drawTrack();
@@ -60,17 +74,24 @@ export default {
     checkPoint: function(e) {
       if (!e) {
         //* Not even trying
+        console.log('not even try, next round')
       } else {
         //* Try
         if (this.currentTrack.name == e.target.innerText) {
+          this.points++;
           console.log('+1 point')
         } else {
           console.log('next round, wrong try')
         }
       }
+
+      this.round++;
       
-      this.pauseAndClearTimeout();
-      this.start();
+      if (this.round < 10) this.start();
+      else {
+        this.gameIsPlaying = false;
+        this.pauseAndClearTimeout();
+      }
     }
   }
 }
@@ -80,5 +101,15 @@ export default {
 .startBtn {
   cursor: pointer;
   font-size: 2rem;
+}
+
+.items {
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  width: 60%;
 }
 </style>
