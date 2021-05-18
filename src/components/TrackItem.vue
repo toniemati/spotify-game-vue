@@ -14,7 +14,7 @@ export default {
 <style scoped>
 .track-item {
   width: 40%;
-  height: 100px;
+  padding: 3rem 1rem;
 
   margin: 1rem;
 
@@ -24,7 +24,7 @@ export default {
 
   border-radius: 20px;
   background-color: rgb(129, 62, 85);
-  font-family: "Poppins";
+  /* font-family: "Poppins"; */
   cursor: pointer;
   color: #eee;
   font-weight: bold;
