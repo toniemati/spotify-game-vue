@@ -3,7 +3,10 @@
 
     <Start v-if="!gameIsPlaying && round == 0" @on-start="start" />
       
-    <h2 v-if="round > 0 && !gameIsPlaying">Accuracy: {{ (points / 10) * 100 }}%</h2>
+    <div v-if="!gameIsPlaying && round">
+      <Summary :mode="mode" :diff="diff" :points="points" />
+      <button @click="restart">try again</button>
+    </div>
 
     <div v-if="gameIsPlaying" class="items">
       <TrackItem @click="checkPoint" v-for="track in fourTracks" :key="track.id" :name="track.name"/>
@@ -16,10 +19,11 @@
 <script>
 import TrackItem from '../components/TrackItem.vue';
 import Start from '../components/Start.vue';
+import Summary from '../components/Summary.vue';
 
 export default {
   name: "GuessTheSong",
-  props: ['tracks', 'diff'],
+  props: ['tracks', 'diff', 'mode'],
   data() {
     return {
       round: 0,
@@ -31,6 +35,11 @@ export default {
     }
   },
   methods: {
+    restart: function() {
+      this.round = 0;
+      this.points = 0;
+      this.start();
+    },
     start: function() {
       this.pauseAndClearTimeout();
 
@@ -91,7 +100,7 @@ export default {
       }
     }
   },
-  components: { TrackItem, Start }
+  components: { TrackItem, Start, Summary }
 }
 </script>
 

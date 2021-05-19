@@ -10,7 +10,7 @@
     </div>
 
     <div v-if="getPlaylist.id">
-      <h4>{{ getPlaylist.name }}</h4>
+      <!-- <h4>{{ getPlaylist.name }}</h4> -->
       <div class="clearPlaylist" @click="clearPlaylist">🔙</div>
       <Game :tracks="tracks" />
     </div>

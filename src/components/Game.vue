@@ -3,12 +3,8 @@
     <Mode v-if="!mode" @select-mode="selectMode"/>
     <Difficluty v-if="!diff && mode" @select-diff="selectDiff" />
 
-    <div v-if="mode && diff" class="menu">
-      <h2>{{ mode }} - {{ difficulty }}</h2>
-    </div>
-
     <div v-if="mode && diff">
-      <GuessTheSong v-if="mode == 'Guess the song'" :tracks="tracks" :diff="diff" />
+      <GuessTheSong v-if="mode == 'Guess the song'" :tracks="tracks" :diff="diff" :mode="mode" />
 
       <p v-else-if="mode == 2">mode 2 | {{ diff }}</p>
       <p v-else-if="mode == 3">mode 3 | {{ diff }}</p>
@@ -29,13 +25,6 @@ export default {
     return {
       mode: null,
       diff: null,
-    }
-  },
-  computed: {
-    difficulty: function() {
-      if (this.diff == 10000) return 'easy';
-      else if (this.diff == 5000) return 'medium';
-      else return 'hard';
     }
   },
   methods: {

@@ -69,13 +69,13 @@ export default {
   font-weight: bold;
   font-family: 'Orbitron', sans-serif;
   color: #3e3e3e;
-  animation-name: small;
+  animation-name: go-in;
   animation-duration: 1s;
   animation-iteration-count: infinite;
   animation-timing-function: ease-out;
 }
 
-@keyframes small {
+@keyframes go-in {
   from { 
     top: 25%; 
     opacity: 0;
