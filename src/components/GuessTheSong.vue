@@ -31,11 +31,13 @@ export default {
       fourTracks: [],
       gameIsPlaying: false,
       timeOut: null,
-      currentTrack: null
+      currentTrack: null,
+      alreadyPlayed: [],
     }
   },
   methods: {
     restart: function() {
+      this.alreadyPlayed = [];
       this.round = 0;
       this.points = 0;
       this.start();
