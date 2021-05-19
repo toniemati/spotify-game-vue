@@ -1,7 +1,8 @@
 <template>
   <div id="guess-the-song">
+
+    <Start v-if="!gameIsPlaying && round == 0" @on-start="start" />
       
-    <div v-if="round == 0" class="startBtn" @click="start">START</div>
     <h2 v-if="round > 0 && !gameIsPlaying">Accuracy: {{ (points / 10) * 100 }}%</h2>
 
     <div v-if="gameIsPlaying" class="items">
@@ -14,6 +15,7 @@
 
 <script>
 import TrackItem from '../components/TrackItem.vue';
+import Start from '../components/Start.vue';
 
 export default {
   name: "GuessTheSong",
@@ -30,6 +32,8 @@ export default {
   },
   methods: {
     start: function() {
+      this.pauseAndClearTimeout();
+
       this.round++;
       this.fourTracks = [];
       this.gameIsPlaying = true;
@@ -87,7 +91,7 @@ export default {
       }
     }
   },
-  components: { TrackItem }
+  components: { TrackItem, Start }
 }
 </script>
 
