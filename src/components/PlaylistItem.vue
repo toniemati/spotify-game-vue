@@ -23,9 +23,10 @@ export default {
 <style scoped>
 .playlist-item {
   border-radius: 10px;
-  margin: 0.2rem 1rem 0.2rem 1rem;
+  margin: .5rem 1rem;
   padding: 1rem;
   width: 15%;
+  background-color: #efefef;
 
   display: flex;
   justify-content: center;

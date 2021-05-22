@@ -5,12 +5,11 @@
     </div>
 
     <div v-if="!getPlaylist.id" class="playlists">
+      <div class="button" v-if="!playlists" @click="getPlaylists">Get my playlists</div>
       <Playlists @send-playlist-id="checkId" v-if="playlists" :playlists="playlists" />
-      <button v-if="!playlists" @click="getPlaylists">get playlists</button>
     </div>
 
     <div v-if="getPlaylist.id">
-      <!-- <h4>{{ getPlaylist.name }}</h4> -->
       <div class="clearPlaylist" @click="clearPlaylist">🔙</div>
       <Game :tracks="tracks" />
     </div>
@@ -102,5 +101,28 @@ export default {
   top: 3rem;
   cursor: pointer;
   font-size: 2rem;
+}
+
+.button {
+  margin: auto;
+  margin-top: 5rem;
+  text-align: center;
+  width: 20%;
+  padding: 2rem;
+  color: #333;
+  font-size: 20px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  border: 5px solid #333;
+  letter-spacing: 5px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: box-shadow .2s ease-in-out;
+}
+
+.button:hover {
+  box-shadow: 
+    0 5px 25px 0 #333 inset,
+    0 10px 50px 5px #333;
 }
 </style>

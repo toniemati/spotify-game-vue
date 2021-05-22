@@ -70,7 +70,7 @@ export default {
 .wrapper {
   margin: auto;
   width: 450px;
-  background-color: #fff;
+  background-color: #efefef;
   padding: 30px;
   box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
 }
@@ -89,6 +89,7 @@ export default {
   font-size: 17px;
   border-bottom: 2px solid silver;
   outline: none;
+  background-color: #efefef;
 }
 
 .input-data input:focus ~ label,
