@@ -104,25 +104,24 @@ export default {
 }
 
 .button {
-  margin: auto;
-  margin-top: 5rem;
-  text-align: center;
+  margin: 5rem auto;
   width: 20%;
   padding: 2rem;
-  color: #333;
-  font-size: 20px;
-  font-family: 'Poppins', sans-serif;
-  font-weight: 800;
-  border: 5px solid #333;
-  letter-spacing: 5px;
-  border-radius: 100px;
+  border: 5px solid #18c755;
+  border-radius: 25px;
   cursor: pointer;
-  transition: box-shadow .2s ease-in-out;
+  background-color: #C9C9C9;
+  font-size: 24px;
+  letter-spacing: 2px;
+  color: #18c755;
+  font-weight: bold;
+  transition: all .2s ease;
 }
 
 .button:hover {
-  box-shadow: 
-    0 5px 25px 0 #333 inset,
-    0 10px 50px 5px #333;
+  color: #333;
+  background-color: #18c755;
+  border: 5px solid #333;
+  box-shadow: 0 0 50px 10px #118d3c;
 }
 </style>
