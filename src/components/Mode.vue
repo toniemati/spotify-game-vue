@@ -12,7 +12,7 @@ export default {
   name: "Mode",
   data() {
     return {
-      modes: ['Guess the song', 'second mode', 'third mode']
+      modes: ['Guess the song', 'Guess the picture', 'third mode']
     }
   },
   methods: {

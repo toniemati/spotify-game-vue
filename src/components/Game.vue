@@ -5,8 +5,8 @@
 
     <div v-if="mode && diff">
       <GuessTheSong v-if="mode == 'Guess the song'" :tracks="tracks" :diff="diff" :mode="mode" />
+      <GuessThePicture v-if="mode == 'Guess the picture'" :tracks="tracks" :diff="diff" :mode="mode" />
 
-      <p v-else-if="mode == 2">mode 2 | {{ diff }}</p>
       <p v-else-if="mode == 3">mode 3 | {{ diff }}</p>
     </div>
   </div>
@@ -16,11 +16,12 @@
 import Mode from '../components/Mode.vue';
 import Difficluty from '../components/Difficulty.vue';
 import GuessTheSong from '../components/GuessTheSong.vue';
+import GuessThePicture from '../components/GuessThePicture.vue';
 
 export default {
   name: "Game",
   props: ['tracks'],
-  components: { Mode, Difficluty, GuessTheSong },
+  components: { Mode, Difficluty, GuessTheSong, GuessThePicture },
   data() {
     return {
       mode: null,

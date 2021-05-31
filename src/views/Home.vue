@@ -38,6 +38,7 @@ export default {
       user: null,
       playlists: null,
       tracks: [],
+      pics: []
     }
   },
   computed: {
@@ -75,6 +76,7 @@ export default {
     getPlaylist() {
       if (this.getPlaylist.id) {
 
+        //* Getting all tracks
         for (let i = 0; i < this.getPlaylist.tracks.total; i += 100) {
           SPOTIFY.getPlaylistTracks(this.getPlaylist.id, { limit: 100, offset: i})
             .then(({ body }) => {
@@ -86,8 +88,16 @@ export default {
               })
             })
         }
+
+        //* Getting all pics
+        SPOTIFY.getArtist("0VRj0yCOv2FXJNP47XQnx5")
+          .then(data => {
+            console.log('gettrack', data.body)
+          })
+
       } else {
         this.tracks = [];
+        this.pics = [];
       }
     }
   }
