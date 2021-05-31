@@ -4,13 +4,27 @@
       <User :user="user" />
     </div>
 
-    <div v-if="!getPlaylist.id" class="playlists">
-      <div class="button" v-if="!playlists" @click="getPlaylists">Get my playlists</div>
-      <Playlists @send-playlist-id="checkId" v-if="playlists" :playlists="playlists" />
+    <Mode v-if="!mode" @select-mode="selectMode" />
+
+    <div v-if="mode && !allOrPl">
+      <button @click="allOrPlFunction('all')">all</button>
+      <button @click="allOrPlFunction('pl')">playlist</button>
     </div>
 
+    <div v-if="mode && allOrPl">
+      <p v-if="allOrPl == 'all'">pobieram wszystkie piosenki i wybieramy difficulty</p>
+      <p v-for="(pic, idx) in pics" :key="idx">{{ pic.name }}</p>
+    </div>
+
+    <Playlists v-if="playlists && allOrPl == 'pl'" @send-playlist-id="checkId"  :playlists="playlists" />
+
+    <!-- <div v-if="!getPlaylist.id" class="playlists">
+      <div class="button" v-if="!playlists" @click="getPlaylists">Get my playlists</div>
+    </div> -->
+
+    <div class="clearPlaylist" @click="clearPlaylist">🔙</div>
+
     <div v-if="getPlaylist.id">
-      <div class="clearPlaylist" @click="clearPlaylist">🔙</div>
       <Game :tracks="tracks" />
     </div>
   </div>
@@ -18,11 +32,11 @@
 
 <script>
 import SpotifyWebApi from 'spotify-web-api-node';
-import { mapActions, mapGetters } from 'vuex'
-import User from '../components/User.vue'
-import Playlists from '../components/Playlists.vue'
+import { mapActions, mapGetters } from 'vuex';
+import User from '../components/User.vue';
+import Playlists from '../components/Playlists.vue';
 import Game from '../components/Game.vue';
-
+import Mode from '../components/Mode.vue';
 
 const SPOTIFY = new SpotifyWebApi({
   clientId: '5f06c16da3c24501a81c345ccb495d22',
@@ -32,13 +46,15 @@ const SPOTIFY = new SpotifyWebApi({
 
 export default {
   name: 'Home',
-  components: { User, Playlists, Game },
+  components: { User, Playlists, Game, Mode },
   data() {
     return {
+      mode: null,
+      allOrPl: null,
       user: null,
       playlists: null,
       tracks: [],
-      pics: []
+      pics: [],
     }
   },
   computed: {
@@ -70,6 +86,43 @@ export default {
             this.setPlaylist(data.body)
           }
         });
+    },
+    selectMode: function(m) {
+      this.getPlaylists();
+      this.mode = m;
+    },
+    allOrPlFunction: function(txt) {
+      this.allOrPl = txt;
+
+      if (txt == 'all') {
+        this.playlists.forEach(playlist => {
+          
+          for (let i = 0; i < playlist.tracks.total; i += 100) {
+            SPOTIFY.getPlaylistTracks(playlist.id, { limit: 100, offset: i})
+              .then(({ body }) => {
+                const { items } = body;
+
+                //* Getting all tracks
+                items.forEach((item) => {
+                  if (item.track.preview_url && item.track.preview_url.length > 0) {
+                    this.tracks.push(item.track)
+                  }
+                })
+
+                //* Getting all pics
+                items.forEach((item) => {
+                  SPOTIFY.getArtist(item.track.artists[0].id)
+                    .then(({ body }) => {
+                      if (body.images[0]) this.pics.push(body)
+                    })
+                })
+              })
+          }
+
+        });
+      } else {
+        console.log('u can select or paste id playlist')
+      }
     }
   },
   watch: {
@@ -89,15 +142,8 @@ export default {
             })
         }
 
-        //* Getting all pics
-        SPOTIFY.getArtist("0VRj0yCOv2FXJNP47XQnx5")
-          .then(data => {
-            console.log('gettrack', data.body)
-          })
-
       } else {
         this.tracks = [];
-        this.pics = [];
       }
     }
   }
